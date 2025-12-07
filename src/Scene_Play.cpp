@@ -88,6 +88,7 @@ void Scene_Play::loadLevel(const std::string& levelPath)
             float sy = 64 / spriteSize.y;
 
             tile->getComponent<CTransform>().scale = sf::Vector2f(sx, sy);
+            tile->addComponent<CBoundingBox>(m_gridSize);
 
         }
     }
@@ -132,7 +133,6 @@ void Scene_Play::onEnd()
 
 void Scene_Play::sRender()
 {
-    // TODO: remove this testing code
     auto& window = m_game->window();
 
     if (!m_paused)
@@ -142,6 +142,20 @@ void Scene_Play::sRender()
     else
     {
         window.clear(sf::Color(50, 50, 150));
+    }
+
+    if (m_drawTextures)
+    {
+        for (auto e : m_entityManager.getEntities())
+        {
+            auto& pos = e->getComponent<CTransform>().pos;
+            auto& scale = e->getComponent<CTransform>().scale;
+            auto& sprite = e->getComponent<CAnimation>().animation.getSprite();
+            sprite.setPosition(pos.x, pos.y);
+            sprite.setScale(scale.x, scale.y);
+
+            window.draw(sprite);
+        }
     }
 
     if (m_drawGrid)
@@ -167,23 +181,19 @@ void Scene_Play::sRender()
         }
     }
 
-    if (m_drawTextures)
-    {
-        for (auto e : m_entityManager.getEntities())
-        {
-            auto& pos = e->getComponent<CTransform>().pos;
-            auto& scale = e->getComponent<CTransform>().scale;
-            auto& sprite = e->getComponent<CAnimation>().animation.getSprite();
-            sprite.setPosition(pos.x, pos.y);
-            sprite.setScale(scale.x, scale.y);
-
-            window.draw(sprite);
-        }
-    }
+    
 
     window.display();
 }
 
 void Scene_Play::sDoAction(const Action& action)
 {
+    if (action.type() == "START")
+    {
+        if (action.name() == "TOGGLE_COLLISION")
+            m_drawCollision = !m_drawCollision;
+            
+    }
+
+
 }
