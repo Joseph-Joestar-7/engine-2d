@@ -30,6 +30,7 @@ private:
 	void sDoAction(const Action& action) override;
 
 	void init(const std::string& levelPath);
+	sf::Vector2f gridToMidPixel(float gridX, float gridY, std::shared_ptr<Entity> entity);
 	void loadLevel(const std::string& levelPath);
 	void sMovement();
 	void sAnimation();

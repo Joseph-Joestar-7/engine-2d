@@ -32,6 +32,12 @@ public:
 	void               destroy();
 
 	template <typename T>
+	T& getComponent()
+	{
+		return std::get<T>(m_components);
+	}
+
+	template <typename T>
 	const T& getComponent() const
 	{
 		return std::get<T>(m_components);
