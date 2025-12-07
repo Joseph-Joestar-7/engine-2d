@@ -39,9 +39,21 @@ sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, std::shared_pt
     // The size of the grid width and height is stored in m_gridSize.x and m_gridSize.y
     // The bottom left corner of the Animation should align with the bottom left of the grid cell
     
-    return sf::Vector2f();
-}
+    //Will figure the sfml to regular math mapping later for now just gotta keep the low as y =16 hehe
 
+    auto& anim = entity->getComponent<CAnimation>().animation;
+    float w = (float)anim.getSize().x;
+    float h = (float)anim.getSize().y;
+
+    float px = gridX * m_gridSize.x;
+    float py = gridY * m_gridSize.y;
+
+    px += w * 0.5f;
+    py += h * 0.5f;
+
+    return sf::Vector2f(px, py);
+
+}
 
 
 void Scene_Play::loadLevel(const std::string& levelPath)
@@ -66,9 +78,43 @@ void Scene_Play::loadLevel(const std::string& levelPath)
             file >> tag >> gx >> gy;
 
             auto tile = m_entityManager.addEntity("tile");
-        }
 
+            tile->addComponent<CAnimation>(m_game->assets().getAnimation(type), true);
+            tile->addComponent<CTransform>();
+            tile->getComponent<CTransform>().pos = gridToMidPixel(gx, gy, tile);
+            const auto& spriteSize = tile->getComponent<CAnimation>().animation.getSize();
+
+            float sx = 64/ spriteSize.x;
+            float sy = 64 / spriteSize.y;
+
+            tile->getComponent<CTransform>().scale = sf::Vector2f(sx, sy);
+
+        }
     }
+}
+
+void Scene_Play::sMovement()
+{
+}
+
+void Scene_Play::sAnimation()
+{
+}
+
+void Scene_Play::sCollision()
+{
+}
+
+void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string& animationName, bool repeat)
+{
+}
+
+void Scene_Play::drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2)
+{
+}
+
+void Scene_Play::spawnPlayer()
+{
 }
 
 void Scene_Play::update()
@@ -78,6 +124,10 @@ void Scene_Play::update()
         m_entityManager.update();
     }
     sRender();
+}
+
+void Scene_Play::onEnd()
+{
 }
 
 void Scene_Play::sRender()
@@ -132,4 +182,8 @@ void Scene_Play::sRender()
     }
 
     window.display();
+}
+
+void Scene_Play::sDoAction(const Action& action)
+{
 }
