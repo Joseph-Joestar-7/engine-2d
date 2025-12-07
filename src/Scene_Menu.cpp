@@ -1,4 +1,5 @@
 #include "Scene_Menu.h"
+#include "Scene_Play.h"
 #include "GameEngine.h"
 #include "Assets.h"
 
@@ -10,6 +11,7 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 
 void Scene_Menu::init()
 {
+	//input binding for this scene
 	registerAction(sf::Keyboard::W, "UP");
 	registerAction(sf::Keyboard::Up, "UP");
 	registerAction(sf::Keyboard::S, "DOWN");
@@ -23,9 +25,9 @@ void Scene_Menu::init()
 	m_menuStrings.push_back("Level 2");
 	m_menuStrings.push_back("Level 3");
 
-	m_levelPaths.push_back("level1.txt");
-	m_levelPaths.push_back("level2.txt");
-	m_levelPaths.push_back("level3.txt");
+	m_levelPaths.push_back("bin/Level1.txt");
+	m_levelPaths.push_back("bin/Level2.txt");
+	m_levelPaths.push_back("bin/Level3.txt");
 	
 	m_menuText.setFont(m_game->assets().getFont("Mario"));
 	m_menuText.setCharacterSize(64);
@@ -47,7 +49,13 @@ void Scene_Menu::sDoAction(const Action& action)
 	{
 		if (action.name() == "SELECT")
 		{
-			
+			m_game->changeScene(
+				"PLAY",
+				std::make_shared<Scene_Play>(
+					m_game,
+					m_levelPaths[m_selectedMenuIndex]
+				)
+			);
 		}
 		else if (action.name() == "UP")
 		{

@@ -1,7 +1,7 @@
 #pragma once
 #include "Action.h"
 #include "Entity.h"
-
+#include "SFML/Graphics.hpp"
 
 class GameEngine; //Forward declaration 
 

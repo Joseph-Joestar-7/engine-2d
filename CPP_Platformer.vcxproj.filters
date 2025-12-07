@@ -42,9 +42,13 @@
     <ClCompile Include="src\Scene_Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene_Play.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="config\config.txt" />
+    <Text Include="bin\Level1.txt" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\KillerTech.ttf" />
@@ -75,6 +79,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene_Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene_Play.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
