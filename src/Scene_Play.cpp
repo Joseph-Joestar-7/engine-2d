@@ -55,7 +55,6 @@ sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, std::shared_pt
 
 }
 
-
 void Scene_Play::loadLevel(const std::string& levelPath)
 {
     m_entityManager = EntityManager();
@@ -71,7 +70,7 @@ void Scene_Play::loadLevel(const std::string& levelPath)
     std::string type;
     while (file >> type)
     {
-        if (type == "TileL" || type == "TileM" || type == "TileR" || type == "TileQ")
+        if (type == "TileL" || type == "TileM" || type == "TileR" || type == "TileQ" || type == "TileB")
         {
             file >> tag >> gx >> gy;
 
