@@ -227,26 +227,15 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
     auto prevOverlap = Physics::GetPreviousOverlap(player, tile);
 
     auto& pTrans = player->getComponent<CTransform>();
-    //std::cout << overlap.x << " " << overlap.y << " " << prevOverlap.x << " " << prevOverlap.y << "\n";
-    if (prevOverlap.y > 0 && prevOverlap.x <= 0)
-    { // side wise collision
-        if (pTrans.pos.x < tile->getComponent<CTransform>().pos.x)
-            pTrans.pos.x -= overlap.x; 
-        else
-            pTrans.pos.x += overlap.x; 
-
-        pTrans.velocity.x = 0;
-    }
-
-    else if (prevOverlap.x > 0 )
+    
+    if (prevOverlap.x > 0 )
     {
         //all these because sfml y axis is inverted and i am too tired to do the math of making it normal
         if (pTrans.pos.y < tile->getComponent<CTransform>().pos.y)
         {
-            std::cout << "This case " << "\n";
             pTrans.pos.y -= overlap.y;
             pTrans.velocity.y = 0;
-            player->getComponent<CState>().state = "grounded";
+            player->getComponent<CState>().state = "idle";
         }
         else
         {
@@ -254,6 +243,17 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
             pTrans.velocity.y = 0;
         }
     }
+    if (prevOverlap.y > 0 && prevOverlap.x<=0)
+    { // side wise collision
+        std::cout << pTrans.pos.x << "\n";
+        if (pTrans.pos.x < tile->getComponent<CTransform>().pos.x)
+            pTrans.pos.x -= overlap.x;
+        else
+            pTrans.pos.x += overlap.x;
+        std::cout << pTrans.pos.x << "\n";
+        pTrans.velocity.x = 0;
+    }
+    
 }
 
 void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string& animationName, bool repeat)
@@ -351,7 +351,6 @@ void Scene_Play::sDoAction(const Action& action)
         else if (action.name() == "JUMP")
         {
             m_player->getComponent<CInput>().up = true;
-            std::cout << m_player->getComponent<CState>().state << "\n";
         }
         else if (action.name() == "LEFT")
         {
