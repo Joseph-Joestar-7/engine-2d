@@ -24,7 +24,8 @@ void Scene_Play::init(const std::string& levelPath)
     registerAction(sf::Keyboard::P, "PAUSE");
     registerAction(sf::Keyboard::T, "TOGGLE_TEXTURE");   
     registerAction(sf::Keyboard::C, "TOGGLE_COLLISION"); 
-    registerAction(sf::Keyboard::G, "TOGGLE_GRID");      
+    registerAction(sf::Keyboard::G, "TOGGLE_GRID");  
+    registerAction(sf::Keyboard::F, "DEBUG");
 
     m_gridText.setCharacterSize(12);
     m_gridText.setFont(m_game->assets().getFont("Mario"));
@@ -226,7 +227,7 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
     auto prevOverlap = Physics::GetPreviousOverlap(player, tile);
 
     auto& pTrans = player->getComponent<CTransform>();
-    std::cout << overlap.x << " " << overlap.y << " " << prevOverlap.x << " " << prevOverlap.y << "\n";
+    //std::cout << overlap.x << " " << overlap.y << " " << prevOverlap.x << " " << prevOverlap.y << "\n";
     if (prevOverlap.y > 0 && prevOverlap.x <= 0)
     { // side wise collision
         if (pTrans.pos.x < tile->getComponent<CTransform>().pos.x)
@@ -237,18 +238,19 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
         pTrans.velocity.x = 0;
     }
 
-    else if (prevOverlap.x > 0)
+    else if (prevOverlap.x > 0 )
     {
-        if (pTrans.pos.y > tile->getComponent<CTransform>().pos.y)
+        //all these because sfml y axis is inverted and i am too tired to do the math of making it normal
+        if (pTrans.pos.y < tile->getComponent<CTransform>().pos.y)
         {
             std::cout << "This case " << "\n";
-            pTrans.pos.y += overlap.y;
+            pTrans.pos.y -= overlap.y;
             pTrans.velocity.y = 0;
             player->getComponent<CState>().state = "grounded";
         }
         else
         {
-            pTrans.pos.y -= overlap.y;
+            pTrans.pos.y += overlap.y;
             pTrans.velocity.y = 0;
         }
     }
@@ -342,11 +344,14 @@ void Scene_Play::sDoAction(const Action& action)
     {
         if (action.name() == "TOGGLE_COLLISION")
             m_drawCollision = !m_drawCollision;
+        else if (action.name() == "DEBUG")
+            flag = !flag;
         else if (action.name() == "EXIT")
             onEnd();
         else if (action.name() == "JUMP")
         {
             m_player->getComponent<CInput>().up = true;
+            std::cout << m_player->getComponent<CState>().state << "\n";
         }
         else if (action.name() == "LEFT")
         {

@@ -21,6 +21,7 @@ private:
 	bool                    m_drawTextures = true;
 	bool                    m_drawCollision = false;
 	bool                    m_drawGrid = false;
+	bool flag = false;
 	const sf::Vector2f      m_gridSize = { 64, 64 };
 	sf::Text                m_gridText;
 

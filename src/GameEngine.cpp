@@ -22,7 +22,7 @@ void GameEngine::init(const std::string& filePath)
 
 	if (fullScreenMode)
 	{
-		m_window.create(sf::VideoMode(width, height), "Custom Game Engine", sf::Style::Fullscreen);
+		m_window.create(sf::VideoMode(1080, 1080), "Custom Game Engine");
 	}
 	else
 	{
