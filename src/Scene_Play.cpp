@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 
+
 Scene_Play::Scene_Play(GameEngine* gameEngine, const std::string& levelPath)
     : Scene(gameEngine)
     , m_levelPath(levelPath)
@@ -100,11 +101,104 @@ void Scene_Play::loadLevel(const std::string& levelPath)
 
             e->getComponent<CTransform>().scale = sf::Vector2f(sx,sy);
         }
+        else
+        {
+            spawnPlayer(file);
+        }
     }
+}
+
+void Scene_Play::spawnPlayer(std::ifstream& file)
+{
+    float gx, gy;
+    float boxW, boxH;
+    float leftRightSpeed, jumpSpeed, maxSpeed, gravity;
+    std::string bulletAnim;
+
+    file >> gx >> gy
+        >> boxW >> boxH
+        >> leftRightSpeed >> jumpSpeed
+        >> maxSpeed >> gravity
+        >> bulletAnim;
+
+    m_player = m_entityManager.addEntity("player");
+    sf::Vector2f box =  { boxW, boxH };
+    m_player->addComponent<CTransform>(gridToMidPixel(gx, gy, m_player));
+    m_player->addComponent<CBoundingBox>(box);
+
+    m_player->addComponent<CAnimation>(m_game->assets().getAnimation("PlayerIdle"), true);
+    const auto& spriteSize = m_player->getComponent<CAnimation>().animation.getSize();
+
+    float sx = 64 / spriteSize.x;
+    float sy = 64 / spriteSize.y;
+
+
+    m_player->getComponent<CTransform>().scale = { sx,sy };
+    m_player->addComponent<CInput>();
+    m_player->addComponent<CState>();
+    m_player->addComponent<CGravity>(gravity);
+    
+
 }
 
 void Scene_Play::sMovement()
 {
+    sf::Vector2f playerVelocity(0, 0);
+
+    auto& input = m_player->getComponent<CInput>();
+    auto& playerState = m_player->getComponent<CState>().state;
+    auto& playerTransform = m_player->getComponent<CTransform>();
+
+    if (playerState != "jump")
+    {
+        if (input.up)
+        {
+            if (playerState == "run" || playerState == "idle")
+            {
+                playerState = "jump";
+            }
+
+            playerVelocity.x = playerTransform.velocity.x;
+            playerVelocity.y -= 15;
+        }
+
+        else if (input.right)
+        {
+            playerVelocity.x += 5;
+            playerState = "run";
+            playerTransform.scale.x = abs(playerTransform.scale.x);
+        }
+        else if (input.left)
+        {
+            playerVelocity.x -= 5;
+            playerState = "run";
+            playerTransform.scale.x = -abs(playerTransform.scale.x);
+        }
+        else if (!input.right && playerState == "run")
+        {
+            playerState = "idle";
+            playerTransform.scale.x = abs(playerTransform.scale.x);
+        }
+        else if (!input.left && playerState == "run")
+        {
+            playerState = "idle";
+            playerTransform.scale.x = -abs(playerTransform.scale.x);
+        }
+
+        m_player->getComponent<CTransform>().velocity = playerVelocity;
+    }
+
+    for (auto e : m_entityManager.getEntities())
+    {
+        if (e->hasComponent<CGravity>())
+        {
+            e->getComponent<CTransform>().velocity.y +=
+                e->getComponent<CGravity>().gravity;
+        }
+
+        e->getComponent<CTransform>().pos +=
+            e->getComponent<CTransform>().velocity;
+    }
 }
 
 void Scene_Play::sAnimation()
@@ -113,6 +207,7 @@ void Scene_Play::sAnimation()
 
 void Scene_Play::sCollision()
 {
+
 }
 
 void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string& animationName, bool repeat)
@@ -123,21 +218,21 @@ void Scene_Play::drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2)
 {
 }
 
-void Scene_Play::spawnPlayer()
-{
-}
+
 
 void Scene_Play::update()
 {
     if (!m_paused)
     {
         m_entityManager.update();
+        sMovement();
     }
     sRender();
 }
 
 void Scene_Play::onEnd()
 {
+    m_game->changeScene("MENU", std::make_shared<Scene_Menu>(m_game));
 }
 
 void Scene_Play::sRender()
@@ -203,9 +298,33 @@ void Scene_Play::sDoAction(const Action& action)
         if (action.name() == "TOGGLE_COLLISION")
             m_drawCollision = !m_drawCollision;
         else if (action.name() == "EXIT")
-            m_game->changeScene(
-                "MENU",
-                std::make_shared<Scene_Menu>(m_game)
-            );
+            onEnd();
+        else if (action.name() == "JUMP")
+        {
+            m_player->getComponent<CInput>().up = true;
+        }
+        else if (action.name() == "LEFT")
+        {
+            m_player->getComponent<CInput>().left = true;
+        }
+        else if (action.name() == "RIGHT")
+        {
+            m_player->getComponent<CInput>().right = true;
+        }
+    }
+    else if (action.type() == "END")
+    {
+        if (action.name() == "JUMP")
+        {
+            m_player->getComponent<CInput>().up = false;
+        }
+        else if (action.name() == "LEFT")
+        {
+            m_player->getComponent<CInput>().left = false;
+        }
+        else if (action.name() == "RIGHT")
+        {
+            m_player->getComponent<CInput>().right = false;
+        }
     }
 }

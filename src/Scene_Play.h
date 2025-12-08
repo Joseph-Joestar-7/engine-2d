@@ -38,7 +38,7 @@ private:
 	void setAnimation(std::shared_ptr<Entity> entity,
 		const std::string& animationName, bool repeat); // helper function
 	void drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2);
-	void spawnPlayer();
+	void spawnPlayer(std::ifstream& file);
 
 public:
 	Scene_Play(GameEngine* gameEngine, const std::string& levelPath);
