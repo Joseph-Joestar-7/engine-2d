@@ -2,11 +2,11 @@
 #include "SFML/Graphics.hpp"
 #include "Entity.h"
 
-class Physics
+ class Physics
 {
 private:
 public:
-	sf::Vector2f GetOverlap(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b);
-	sf::Vector2f GetPreviousOverlap(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b);
+	static sf::Vector2f GetOverlap(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b);
+	static sf::Vector2f GetPreviousOverlap(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b);
 };
 

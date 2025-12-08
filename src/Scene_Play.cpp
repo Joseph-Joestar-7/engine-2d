@@ -3,7 +3,7 @@
 #include "GameEngine.h"
 #include <fstream>
 #include <iostream>
-
+#include "Physics.h"
 
 Scene_Play::Scene_Play(GameEngine* gameEngine, const std::string& levelPath)
     : Scene(gameEngine)
@@ -75,7 +75,7 @@ void Scene_Play::loadLevel(const std::string& levelPath)
         {
             file >> tag >> gx >> gy;
 
-            auto tile = m_entityManager.addEntity(tag);
+            auto tile = m_entityManager.addEntity("Tile");
 
             tile->addComponent<CAnimation>(m_game->assets().getAnimation(type), true);
             tile->addComponent<CTransform>();
@@ -207,7 +207,21 @@ void Scene_Play::sAnimation()
 
 void Scene_Play::sCollision()
 {
+    auto tiles = m_entityManager.getEntities("Tile");
+    
+    for (auto t : tiles)
+    {
+        auto overlap = Physics::GetOverlap(m_player, t);
 
+        if (overlap.x > 0 && overlap.y > 0)
+        {
+            resolveCollision(m_player, t);
+        }
+    }
+}
+
+void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_ptr<Entity> tile)
+{
 }
 
 void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string& animationName, bool repeat)
@@ -226,6 +240,7 @@ void Scene_Play::update()
     {
         m_entityManager.update();
         sMovement();
+        sCollision();
     }
     sRender();
 }
