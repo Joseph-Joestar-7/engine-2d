@@ -39,7 +39,7 @@ sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, std::shared_pt
     // The size of the grid width and height is stored in m_gridSize.x and m_gridSize.y
     // The bottom left corner of the Animation should align with the bottom left of the grid cell
     
-    //Will figure the sfml to regular math mapping later for now just gotta keep the low as y =16 hehe
+    //Will figure the sfml to regular math mapping later for now just gotta keep the low as y =16 in the level files hehe
 
     auto& anim = entity->getComponent<CAnimation>().animation;
     float w = (float)anim.getSize().x;
@@ -66,30 +66,40 @@ void Scene_Play::loadLevel(const std::string& levelPath)
         std::cerr << "Cannot open level file: " << levelPath << "\n";
         return;
     }
-
+    std::string tag;
+    float gx, gy, sx, sy;
     std::string type;
     while (file >> type)
     {
-        if (type == "TileL" || type == "TileM" || type == "TileR")
+        if (type == "TileL" || type == "TileM" || type == "TileR" || type == "TileQ")
         {
-            std::string tag;
-            float gx, gy;
-
             file >> tag >> gx >> gy;
 
-            auto tile = m_entityManager.addEntity("tile");
+            auto tile = m_entityManager.addEntity(tag);
 
             tile->addComponent<CAnimation>(m_game->assets().getAnimation(type), true);
             tile->addComponent<CTransform>();
             tile->getComponent<CTransform>().pos = gridToMidPixel(gx, gy, tile);
             const auto& spriteSize = tile->getComponent<CAnimation>().animation.getSize();
 
-            float sx = 64/ spriteSize.x;
-            float sy = 64 / spriteSize.y;
+            sx = 64/ spriteSize.x;
+            sy = 64 / spriteSize.y;
 
             tile->getComponent<CTransform>().scale = sf::Vector2f(sx, sy);
             tile->addComponent<CBoundingBox>(m_gridSize);
+        }
+        else if (type == "Dec")
+        {
+            file >> tag >> gx >> gy>>sx>>sy;
 
+            auto e = m_entityManager.addEntity(tag);
+
+            e->addComponent<CAnimation>(m_game->assets().getAnimation(tag), true);
+            
+            e->addComponent<CTransform>();
+            e->getComponent<CTransform>().pos = gridToMidPixel(gx, gy, e);
+
+            e->getComponent<CTransform>().scale = sf::Vector2f(sx,sy);
         }
     }
 }
@@ -151,6 +161,7 @@ void Scene_Play::sRender()
             auto& pos = e->getComponent<CTransform>().pos;
             auto& scale = e->getComponent<CTransform>().scale;
             auto& sprite = e->getComponent<CAnimation>().animation.getSprite();
+            e->getComponent<CAnimation>().animation.update();
             sprite.setPosition(pos.x, pos.y);
             sprite.setScale(scale.x, scale.y);
 
@@ -194,6 +205,4 @@ void Scene_Play::sDoAction(const Action& action)
             m_drawCollision = !m_drawCollision;
             
     }
-
-
 }

@@ -20,6 +20,7 @@ public:
 		size_t keyframesCount, size_t duration);
 
 	sf::Sprite& getSprite();
+	void changeColor(sf::Color);
 	const std::string& getName()   const;
 	const sf::Vector2f& getSize()   const;
 

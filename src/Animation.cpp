@@ -32,9 +32,16 @@ sf::Sprite& Animation::getSprite()
 	return m_sprite;
 }
 
+void Animation::changeColor(sf::Color c)
+{
+	m_sprite.setColor(c);
+}
+
 void Animation::update()
 {
 	m_gameFrames++;
+	if (m_duration == 0)
+		return;
 	m_currentKeyframe = (m_gameFrames / m_duration) % m_keyframesCount;
 	const auto rectange = sf::IntRect(
 		m_currentKeyframe * m_size.x, 0, m_size.x, m_size.y

@@ -1,2 +1,56 @@
-﻿  Scene_Play.cpp
+﻿  Animation.cpp
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,64): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,64): warning C4244:         with
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,64): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,64): warning C4244:             T=float
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,64): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,64): warning C4244:         and
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,64): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,64): warning C4244:             T=int
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,64): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,54): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,54): warning C4244:         with
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,54): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,54): warning C4244:             T=float
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,54): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,54): warning C4244:         and
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,54): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,54): warning C4244:             T=int
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,54): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,33): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,33): warning C4244:         with
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,33): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,33): warning C4244:             T=float
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,33): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,33): warning C4244:         and
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,33): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,33): warning C4244:             T=int
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(26,33): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,52): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,52): warning C4244:         with
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,52): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,52): warning C4244:             T=float
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,52): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,52): warning C4244:         and
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,52): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,52): warning C4244:             T=int
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,52): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,42): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,42): warning C4244:         with
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,42): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,42): warning C4244:             T=float
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,42): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,42): warning C4244:         and
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,42): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,42): warning C4244:             T=int
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,42): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,21): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,21): warning C4244:         with
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,21): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,21): warning C4244:             T=float
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,21): warning C4244:         ]
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,21): warning C4244:         and
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,21): warning C4244:         [
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,21): warning C4244:             T=int
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Animation.cpp(47,21): warning C4244:         ]
   CPP_Platformer.vcxproj -> C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\x64\Debug\CPP_Platformer.exe
