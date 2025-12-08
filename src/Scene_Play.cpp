@@ -202,6 +202,10 @@ void Scene_Play::sDoAction(const Action& action)
     {
         if (action.name() == "TOGGLE_COLLISION")
             m_drawCollision = !m_drawCollision;
-            
+        else if (action.name() == "EXIT")
+            m_game->changeScene(
+                "MENU",
+                std::make_shared<Scene_Menu>(m_game)
+            );
     }
 }
