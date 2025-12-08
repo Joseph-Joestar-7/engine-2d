@@ -35,6 +35,8 @@ private:
 	void sMovement();
 	void sAnimation();
 	void sCollision();
+	void resolveCollision(std::shared_ptr<Entity> player,
+		std::shared_ptr<Entity> tile);
 	void setAnimation(std::shared_ptr<Entity> entity,
 		const std::string& animationName, bool repeat); // helper function
 	void drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2);

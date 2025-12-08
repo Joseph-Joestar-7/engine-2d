@@ -222,6 +222,36 @@ void Scene_Play::sCollision()
 
 void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_ptr<Entity> tile)
 {
+    auto overlap = Physics::GetOverlap(player, tile);
+    auto prevOverlap = Physics::GetPreviousOverlap(player, tile);
+
+    auto& pTrans = player->getComponent<CTransform>();
+    std::cout << overlap.x << " " << overlap.y << " " << prevOverlap.x << " " << prevOverlap.y << "\n";
+    if (prevOverlap.y > 0 && prevOverlap.x <= 0)
+    { // side wise collision
+        if (pTrans.pos.x < tile->getComponent<CTransform>().pos.x)
+            pTrans.pos.x -= overlap.x; 
+        else
+            pTrans.pos.x += overlap.x; 
+
+        pTrans.velocity.x = 0;
+    }
+
+    else if (prevOverlap.x > 0)
+    {
+        if (pTrans.pos.y > tile->getComponent<CTransform>().pos.y)
+        {
+            std::cout << "This case " << "\n";
+            pTrans.pos.y += overlap.y;
+            pTrans.velocity.y = 0;
+            player->getComponent<CState>().state = "grounded";
+        }
+        else
+        {
+            pTrans.pos.y -= overlap.y;
+            pTrans.velocity.y = 0;
+        }
+    }
 }
 
 void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string& animationName, bool repeat)
