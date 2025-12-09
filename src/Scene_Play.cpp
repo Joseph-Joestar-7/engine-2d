@@ -325,7 +325,8 @@ void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string til
     if (tileName == "TileB")
     {
         setAnimation(tile, "Explode", false);
-        tile->addComponent<CLifespan>().remaining= tile->getComponent<CAnimation>().animation.getKeyframeCount();
+        float totalFrames = tile->getComponent<CAnimation>().animation.getAnimDuration();
+        tile->addComponent<CLifespan>(totalFrames);
         
     }
     else if (tileName == "TileQ")

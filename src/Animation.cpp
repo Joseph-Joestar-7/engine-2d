@@ -55,9 +55,9 @@ const sf::Vector2f& Animation::getSize() const
 	return m_size;
 }
 
-const size_t Animation::getKeyframeCount() const
+const size_t Animation::getAnimDuration() const
 {
-	return m_keyframesCount;
+	return m_keyframesCount* m_duration;
 }
 
 const std::string& Animation::getName() const
