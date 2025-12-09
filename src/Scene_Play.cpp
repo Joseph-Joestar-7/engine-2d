@@ -247,7 +247,8 @@ void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string&
 void Scene_Play::sCollision()
 {
     auto tiles = m_entityManager.getEntities("Tile");
-    
+    m_player->getComponent<CState>().isGrounded = false;
+
     for (auto t : tiles)
     {
         auto overlap = Physics::GetOverlap(m_player, t);
