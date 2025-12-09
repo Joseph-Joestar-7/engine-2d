@@ -327,14 +327,33 @@ void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string til
         setAnimation(tile, "Explode", false);
         float totalFrames = tile->getComponent<CAnimation>().animation.getAnimDuration();
         tile->addComponent<CLifespan>(totalFrames);
-        
     }
     else if (tileName == "TileQ")
     {
+        tile->getComponent<CAnimation>().repeat = false;
+        sf::Vector2f pos = { tile->getComponent<CTransform>().pos.x,tile->getComponent<CTransform>().pos.y -64 };
+        spawnCoin(pos);
         
     }
 }
 
+void Scene_Play::spawnCoin(sf::Vector2f& pos)
+{
+    auto coin = m_entityManager.addEntity("Coin");
+    coin->addComponent<CTransform>();
+    coin->getComponent<CTransform>().pos = pos;
+
+    coin->addComponent<CAnimation>(m_game->assets().getAnimation("Coin"), true);
+
+    const auto& spriteSize = coin->getComponent<CAnimation>().animation.getSize();
+
+    float sx = 64 / spriteSize.x;
+    float sy = 64 / spriteSize.y;
+    coin->getComponent<CTransform>().scale = { sx,sy };
+
+    coin->addComponent<CBoundingBox>(m_gridSize);
+
+}
 
 
 void Scene_Play::drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2)

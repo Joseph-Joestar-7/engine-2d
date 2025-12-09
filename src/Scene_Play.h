@@ -48,6 +48,7 @@ private:
 
 	void drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2);
 	void spawnPlayer(std::ifstream& file);
+	void spawnCoin(sf::Vector2f& pos);
 
 public:
 	Scene_Play(GameEngine* gameEngine, const std::string& levelPath);
