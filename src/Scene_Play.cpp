@@ -151,7 +151,14 @@ void Scene_Play::sMovement()
     bool& isG = m_player->getComponent<CState>().isGrounded;
     auto& playerTransform = m_player->getComponent<CTransform>();
 
-    if (playerState != "jump" && isG)
+    //basically setting it back to idle if you've finished jump already
+    //it ain't perfect but it works so all is well
+    if (isG && playerState == "jump")
+    {
+        playerState = "idle";
+    }
+
+    if (isG)
     {
         if (input.up)
         {
