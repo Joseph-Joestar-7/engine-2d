@@ -247,6 +247,9 @@ void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string&
 void Scene_Play::sCollision()
 {
     auto tiles = m_entityManager.getEntities("Tile");
+
+    //I am setting the isGrounded false so that I can check for each tick, if I'm in the air
+    //Since it's already false before resolve collision is called -> if no block overlapped with us, it retains value
     m_player->getComponent<CState>().isGrounded = false;
 
     for (auto t : tiles)
