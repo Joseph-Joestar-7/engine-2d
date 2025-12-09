@@ -25,7 +25,7 @@ private:
 	const sf::Vector2f      m_gridSize = { 64, 64 };
 	sf::Text                m_gridText;
 
-	sf::Text                m_scoreText;
+	sf::Text                m_coinText;
 
 	void update()                        override;
 	void onEnd()                         override;

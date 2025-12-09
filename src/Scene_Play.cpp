@@ -249,18 +249,27 @@ void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string&
 
 void Scene_Play::sCollision()
 {
-    auto tiles = m_entityManager.getEntities("Tile");
+    auto collidingEntities = m_entityManager.getEntities();
 
     //I am setting the isGrounded false so that I can check for each tick, if I'm in the air
     //Since it's already false before resolve collision is called -> if no block overlapped with us, it retains value
     m_player->getComponent<CState>().isGrounded = false;
 
-    for (auto t : tiles)
+    for (auto t : collidingEntities)
     {
+        if (!t->hasComponent<CBoundingBox>() || t == m_player)
+            continue;
+
         auto overlap = Physics::GetOverlap(m_player, t);
 
         if (overlap.x > 0 && overlap.y > 0)
         {
+            if (t->getComponent<CAnimation>().animation.getName() == "Coin")
+            {
+                m_player->getComponent<CScore>().coins++;
+                t->destroy();
+                break;
+            }
             resolveCollision(m_player, t);
         }
     }
@@ -329,6 +338,7 @@ void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string til
     {
         setAnimation(tile, "Explode", false);
         float totalFrames = tile->getComponent<CAnimation>().animation.getAnimDuration();
+        tile->removeComponent<CBoundingBox>();
         tile->addComponent<CLifespan>(totalFrames);
     }
     else if (tileName == "TileQ")
@@ -390,8 +400,6 @@ void Scene_Play::sRender()
 {
     auto& window = m_game->window();
 
-
-
     if (!m_paused)
     {
         window.clear(sf::Color(100, 100, 255));
@@ -400,6 +408,20 @@ void Scene_Play::sRender()
     {
         window.clear(sf::Color(50, 50, 150));
     }
+
+    m_coinText.setFont(m_game->assets().getFont("Mario"));
+    m_coinText.setCharacterSize(32);
+
+    m_coinText.setString("Coins = " + std::to_string(m_player->getComponent<CScore>().coins));
+    m_coinText.setFillColor(sf::Color::White);
+
+    const float paddingX = 20;
+    const float paddingY = 5;
+    const float posX = window.getSize().x - m_coinText.getLocalBounds().width - paddingX;
+    const float posY = 10 + paddingY;
+    m_coinText.setPosition(posX, posY);
+
+    window.draw(m_coinText);
 
     if (m_drawTextures)
     {
