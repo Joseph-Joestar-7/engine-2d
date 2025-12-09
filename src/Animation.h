@@ -23,6 +23,7 @@ public:
 	void changeColor(sf::Color);
 	const std::string& getName()   const;
 	const sf::Vector2f& getSize()   const;
+	const size_t getKeyframeCount() const;
 
 	void update();
 	bool hasEnded() const;

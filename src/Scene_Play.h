@@ -25,6 +25,8 @@ private:
 	const sf::Vector2f      m_gridSize = { 64, 64 };
 	sf::Text                m_gridText;
 
+	sf::Text                m_scoreText;
+
 	void update()                        override;
 	void onEnd()                         override;
 	void sRender()                       override;
@@ -36,10 +38,14 @@ private:
 	void sMovement();
 	void sAnimation();
 	void sCollision();
+	void sLifeSpan();
+
 	void resolveCollision(std::shared_ptr<Entity> player,
 		std::shared_ptr<Entity> tile);
+	void handleSpecialBlock(std::shared_ptr<Entity> tile, std::string tileName);
 	void setAnimation(std::shared_ptr<Entity> entity,
-		const std::string& animationName, bool repeat); // helper function
+		const std::string& animationName, bool repeat); 
+
 	void drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2);
 	void spawnPlayer(std::ifstream& file);
 

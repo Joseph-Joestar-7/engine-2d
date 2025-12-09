@@ -39,6 +39,7 @@ void Animation::changeColor(sf::Color c)
 
 void Animation::update()
 {
+	
 	m_gameFrames++;
 	if (m_duration == 0)
 		return;
@@ -52,6 +53,11 @@ void Animation::update()
 const sf::Vector2f& Animation::getSize() const
 {
 	return m_size;
+}
+
+const size_t Animation::getKeyframeCount() const
+{
+	return m_keyframesCount;
 }
 
 const std::string& Animation::getName() const

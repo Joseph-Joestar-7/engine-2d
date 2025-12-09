@@ -263,6 +263,23 @@ void Scene_Play::sCollision()
     }
 }
 
+void Scene_Play::sLifeSpan()
+{
+    for (auto e : m_entityManager.getEntities())
+    {
+        if (!e->hasComponent<CLifespan>())
+            continue;
+
+        auto& life = e->getComponent<CLifespan>();
+        life.remaining--;
+
+        if (life.remaining <= 0)
+        {
+            e->destroy();   
+        }
+    }
+}
+
 void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_ptr<Entity> tile)
 {
     auto overlap = Physics::GetOverlap(player, tile);
@@ -283,6 +300,11 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
         {
             pTrans.pos.y += overlap.y;
             pTrans.velocity.y = 0;
+            std::string tileName = tile->getComponent<CAnimation>().animation.getName();
+            if (tileName == "TileB" || tileName == "TileQ")
+            {
+                handleSpecialBlock(tile,tileName);
+            }
         }
     }
     if (prevOverlap.y > 0 && prevOverlap.x<=0)
@@ -296,6 +318,20 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
         pTrans.velocity.x = 0;
     }
     
+}
+
+void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string tileName)
+{
+    if (tileName == "TileB")
+    {
+        setAnimation(tile, "Explode", false);
+        tile->addComponent<CLifespan>().remaining= tile->getComponent<CAnimation>().animation.getKeyframeCount();
+        
+    }
+    else if (tileName == "TileQ")
+    {
+        
+    }
 }
 
 
@@ -313,6 +349,7 @@ void Scene_Play::update()
         m_entityManager.update();
         sMovement();
         sCollision();
+        sLifeSpan();
         sAnimation();
     }
     sRender();
@@ -326,6 +363,8 @@ void Scene_Play::onEnd()
 void Scene_Play::sRender()
 {
     auto& window = m_game->window();
+
+
 
     if (!m_paused)
     {
@@ -343,7 +382,10 @@ void Scene_Play::sRender()
             auto& pos = e->getComponent<CTransform>().pos;
             auto& scale = e->getComponent<CTransform>().scale;
             auto& sprite = e->getComponent<CAnimation>().animation.getSprite();
+
+            if(e->getComponent<CAnimation>().repeat || e->getComponent<CAnimation>().animation.hasEnded()== false)
             e->getComponent<CAnimation>().animation.update();
+
             sprite.setPosition(pos.x, pos.y);
             sprite.setScale(scale.x, scale.y);
 
