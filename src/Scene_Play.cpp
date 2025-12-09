@@ -148,15 +148,17 @@ void Scene_Play::sMovement()
 
     auto& input = m_player->getComponent<CInput>();
     auto& playerState = m_player->getComponent<CState>().state;
+    bool& isG = m_player->getComponent<CState>().isGrounded;
     auto& playerTransform = m_player->getComponent<CTransform>();
 
-    if (playerState != "jump")
+    if (playerState != "jump" && isG)
     {
         if (input.up)
         {
             if (playerState == "run" || playerState == "idle")
             {
                 playerState = "jump";
+                isG = false;
             }
 
             playerVelocity.x = playerTransform.velocity.x;
@@ -168,6 +170,7 @@ void Scene_Play::sMovement()
             playerVelocity.x += 5;
             playerState = "run";
             playerTransform.scale.x = abs(playerTransform.scale.x);
+            
         }
         else if (input.left)
         {
@@ -177,16 +180,19 @@ void Scene_Play::sMovement()
         }
         else if (!input.right && playerState == "run")
         {
+            
             playerState = "idle";
             playerTransform.scale.x = abs(playerTransform.scale.x);
         }
         else if (!input.left && playerState == "run")
         {
+            
             playerState = "idle";
             playerTransform.scale.x = -abs(playerTransform.scale.x);
         }
-
+        
         m_player->getComponent<CTransform>().velocity = playerVelocity;
+
     }
 
     for (auto e : m_entityManager.getEntities())
@@ -200,10 +206,35 @@ void Scene_Play::sMovement()
         e->getComponent<CTransform>().pos +=
             e->getComponent<CTransform>().velocity;
     }
+    
 }
 
 void Scene_Play::sAnimation()
 {
+    const auto& playerState = m_player->getComponent<CState>().state;
+
+
+    if (playerState == "run")
+    {
+        setAnimation(m_player, "PlayerRun", true);
+    }
+    else if (playerState == "idle")
+    {
+        setAnimation(m_player, "PlayerIdle", true);
+    }
+    else if (playerState == "jump")
+    {
+        setAnimation(m_player, "PlayerJump", true);
+    }
+
+    m_player->getComponent<CAnimation>().animation.update();
+}
+
+void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string& animationName, bool repeat)
+{
+    if (entity->getComponent<CAnimation>().animation.getName() != animationName) {
+        entity->getComponent<CAnimation>() = CAnimation(m_game->assets().getAnimation(animationName), repeat); 
+    }
 }
 
 void Scene_Play::sCollision()
@@ -235,7 +266,7 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
         {
             pTrans.pos.y -= overlap.y;
             pTrans.velocity.y = 0;
-            player->getComponent<CState>().state = "idle";
+            player->getComponent<CState>().isGrounded = true;
         }
         else
         {
@@ -256,9 +287,7 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
     
 }
 
-void Scene_Play::setAnimation(std::shared_ptr<Entity> entity, const std::string& animationName, bool repeat)
-{
-}
+
 
 void Scene_Play::drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2)
 {
@@ -273,6 +302,7 @@ void Scene_Play::update()
         m_entityManager.update();
         sMovement();
         sCollision();
+        sAnimation();
     }
     sRender();
 }

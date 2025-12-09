@@ -96,6 +96,7 @@ class CState : public Component
 {
 public:
 	std::string state = "None";
+	bool isGrounded = true;
 	CState()
 	{
 	}
