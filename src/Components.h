@@ -7,6 +7,14 @@ public:
 	bool has = false;
 };
 
+class CScore : public Component
+{
+public:
+	int coins = 0;
+
+	CScore() {};
+};
+
 class CTransform : public Component
 {
 public:

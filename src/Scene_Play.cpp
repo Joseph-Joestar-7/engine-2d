@@ -88,6 +88,9 @@ void Scene_Play::loadLevel(const std::string& levelPath)
 
             tile->getComponent<CTransform>().scale = sf::Vector2f(sx, sy);
             tile->addComponent<CBoundingBox>(m_gridSize);
+
+            if (type == "TileQ")
+                tile->addComponent<CState>("Unused");
         }
         else if (type == "Dec")
         {
@@ -169,7 +172,7 @@ void Scene_Play::sMovement()
             }
 
             playerVelocity.x = playerTransform.velocity.x;
-            playerVelocity.y -= 15;
+            playerVelocity.y -= 20;
         }
 
         else if (input.right)
@@ -330,10 +333,13 @@ void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string til
     }
     else if (tileName == "TileQ")
     {
+        if (tile->getComponent<CState>().state == "Used")
+            return;
+
+        tile->getComponent<CState>().state = "Used";
         tile->getComponent<CAnimation>().repeat = false;
-        sf::Vector2f pos = { tile->getComponent<CTransform>().pos.x,tile->getComponent<CTransform>().pos.y -64 };
+        sf::Vector2f pos = { tile->getComponent<CTransform>().pos.x,tile->getComponent<CTransform>().pos.y - m_gridSize.y }; // bruh i swear i wasn't using 64 as magic number here
         spawnCoin(pos);
-        
     }
 }
 
@@ -435,9 +441,6 @@ void Scene_Play::sRender()
             }
         }
     }
-
-    
-
     window.display();
 }
 
