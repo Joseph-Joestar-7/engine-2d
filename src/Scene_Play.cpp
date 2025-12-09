@@ -139,7 +139,8 @@ void Scene_Play::spawnPlayer(std::ifstream& file)
 
     m_player->getComponent<CTransform>().scale = { sx,sy };
     m_player->addComponent<CInput>();
-    m_player->addComponent<CState>();
+    m_player->addComponent<CState>("idle");
+    m_player->getComponent<CState>().states.push_back("false");
     m_player->addComponent<CGravity>(gravity);
     
 
@@ -150,25 +151,25 @@ void Scene_Play::sMovement()
     sf::Vector2f playerVelocity(0, 0);
 
     auto& input = m_player->getComponent<CInput>();
-    auto& playerState = m_player->getComponent<CState>().state;
-    bool& isG = m_player->getComponent<CState>().isGrounded;
+    auto& playerState = m_player->getComponent<CState>().states;
+    std::string& isG = m_player->getComponent<CState>().states[1];
     auto& playerTransform = m_player->getComponent<CTransform>();
 
     //basically setting it back to idle if you've finished jump already
     //it ain't perfect but it works so all is well
-    if (isG && playerState == "jump")
+    if (isG == "true" && playerState[0] == "jump")
     {
-        playerState = "idle";
+        playerState[0] = "idle";
     }
 
-    if (isG)
+    if (isG == "true")
     {
         if (input.up)
         {
-            if (playerState == "run" || playerState == "idle")
+            if (playerState[0] == "run" || playerState[0] == "idle")
             {
-                playerState = "jump";
-                isG = false;
+                playerState[0] = "jump";
+                isG = "false";
             }
 
             playerVelocity.x = playerTransform.velocity.x;
@@ -178,26 +179,26 @@ void Scene_Play::sMovement()
         else if (input.right)
         {
             playerVelocity.x += 5;
-            playerState = "run";
+            playerState[0] = "run";
             playerTransform.scale.x = abs(playerTransform.scale.x);
             
         }
         else if (input.left)
         {
             playerVelocity.x -= 5;
-            playerState = "run";
+            playerState[0] = "run";
             playerTransform.scale.x = -abs(playerTransform.scale.x);
         }
-        else if (!input.right && playerState == "run")
+        else if (!input.right && playerState[0] == "run")
         {
             
-            playerState = "idle";
+            playerState[0] = "idle";
             playerTransform.scale.x = abs(playerTransform.scale.x);
         }
-        else if (!input.left && playerState == "run")
+        else if (!input.left && playerState[0] == "run")
         {
             
-            playerState = "idle";
+            playerState[0] = "idle";
             playerTransform.scale.x = -abs(playerTransform.scale.x);
         }
         
@@ -221,18 +222,18 @@ void Scene_Play::sMovement()
 
 void Scene_Play::sAnimation()
 {
-    const auto& playerState = m_player->getComponent<CState>().state;
+    const auto& playerState = m_player->getComponent<CState>().states;
 
 
-    if (playerState == "run")
+    if (playerState[0] == "run")
     {
         setAnimation(m_player, "PlayerRun", true);
     }
-    else if (playerState == "idle")
+    else if (playerState[0] == "idle")
     {
         setAnimation(m_player, "PlayerIdle", true);
     }
-    else if (playerState == "jump")
+    else if (playerState[0] == "jump")
     {
         setAnimation(m_player, "PlayerJump", true);
     }
@@ -253,7 +254,7 @@ void Scene_Play::sCollision()
 
     //I am setting the isGrounded false so that I can check for each tick, if I'm in the air
     //Since it's already false before resolve collision is called -> if no block overlapped with us, it retains value
-    m_player->getComponent<CState>().isGrounded = false;
+    m_player->getComponent<CState>().states[1] = "false";
 
     for (auto t : collidingEntities)
     {
@@ -306,7 +307,7 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
         {
             pTrans.pos.y -= overlap.y;
             pTrans.velocity.y = 0;
-            player->getComponent<CState>().isGrounded = true;
+            player->getComponent<CState>().states[1] = "true";
         }
         else
         {
@@ -343,10 +344,10 @@ void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string til
     }
     else if (tileName == "TileQ")
     {
-        if (tile->getComponent<CState>().state == "Used")
+        if (tile->getComponent<CState>().states[0] == "Used")
             return;
 
-        tile->getComponent<CState>().state = "Used";
+        tile->getComponent<CState>().states[0] = "Used";
         tile->getComponent<CAnimation>().repeat = false;
         sf::Vector2f pos = { tile->getComponent<CTransform>().pos.x,tile->getComponent<CTransform>().pos.y - m_gridSize.y }; // bruh i swear i wasn't using 64 as magic number here
         spawnCoin(pos);

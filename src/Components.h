@@ -103,15 +103,16 @@ public:
 class CState : public Component
 {
 public:
-	std::string state = "None";
-	bool isGrounded = true;
+	
+	std::vector<std::string> states;
 	CState()
 	{
 	}
 
 	CState(const std::string& _state)
-		: state(_state)
+		
 	{
+		states.push_back(_state);
 	}
 };
 

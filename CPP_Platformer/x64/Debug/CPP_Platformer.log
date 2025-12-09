@@ -1,14 +1,21 @@
-﻿  Scene_Play.cpp
-C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(340,27): warning C4244: 'initializing': conversion from 'size_t' to 'float', possible loss of data
+﻿  Entity.cpp
+  EntityManager.cpp
+  GameEngine.cpp
+  Main.cpp
+  Physics.cpp
+  Scene.cpp
+  Scene_Play.cpp
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(341,27): warning C4244: 'initializing': conversion from 'size_t' to 'float', possible loss of data
 C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Entity.h(51,36): warning C4244: 'argument': conversion from 'float' to 'const int', possible loss of data
   (compiling source file 'src/Scene_Play.cpp')
       C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Entity.h(51,36):
       the template instantiation context (the oldest one first) is
-          C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(342,13):
+          C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(343,13):
           see reference to function template instantiation 'T &Entity::addComponent<CLifespan,float&>(float &)' being compiled
           with
           [
               T=CLifespan
           ]
   
+  Generating Code...
   CPP_Platformer.vcxproj -> C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\x64\Debug\CPP_Platformer.exe
