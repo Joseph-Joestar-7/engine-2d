@@ -20,6 +20,7 @@ void Scene_Play::init(const std::string& levelPath)
     registerAction(sf::Keyboard::Right, "RIGHT");
     registerAction(sf::Keyboard::A, "LEFT");
     registerAction(sf::Keyboard::Left, "LEFT");
+    registerAction(sf::Keyboard::Space, "GUN");
     registerAction(sf::Keyboard::Escape, "EXIT");
     registerAction(sf::Keyboard::P, "PAUSE");
     registerAction(sf::Keyboard::T, "TOGGLE_TEXTURE");   
@@ -141,6 +142,7 @@ void Scene_Play::spawnPlayer(std::ifstream& file)
     m_player->addComponent<CInput>();
     m_player->addComponent<CState>("idle");
     m_player->getComponent<CState>().states.push_back("false");
+    m_player->getComponent<CState>().states.push_back("nogun");
     m_player->addComponent<CGravity>(gravity);
     
 
@@ -224,19 +226,37 @@ void Scene_Play::sAnimation()
 {
     const auto& playerState = m_player->getComponent<CState>().states;
 
-
-    if (playerState[0] == "run")
+    if (playerState[2] == "gun")
     {
-        setAnimation(m_player, "PlayerRun", true);
+        if (playerState[0] == "run")
+        {
+            setAnimation(m_player, "PlayerRunGun", true);
+        }
+        else if (playerState[0] == "idle")
+        {
+            setAnimation(m_player, "PlayerIdleGun", true);
+        }
+        else if (playerState[0] == "jump")
+        {
+            setAnimation(m_player, "PlayerJumpGun", true);
+        }
     }
-    else if (playerState[0] == "idle")
+    else
     {
-        setAnimation(m_player, "PlayerIdle", true);
+        if (playerState[0] == "run")
+        {
+            setAnimation(m_player, "PlayerRun", true);
+        }
+        else if (playerState[0] == "idle")
+        {
+            setAnimation(m_player, "PlayerIdle", true);
+        }
+        else if (playerState[0] == "jump")
+        {
+            setAnimation(m_player, "PlayerJump", true);
+        }
     }
-    else if (playerState[0] == "jump")
-    {
-        setAnimation(m_player, "PlayerJump", true);
-    }
+    
 
     m_player->getComponent<CAnimation>().animation.update();
 }
@@ -489,6 +509,10 @@ void Scene_Play::sDoAction(const Action& action)
         {
             m_player->getComponent<CInput>().right = true;
         }
+        else if (action.name() == "GUN")
+        {
+            m_player->getComponent<CState>().states[2] = "gun";
+        }
     }
     else if (action.type() == "END")
     {
@@ -503,6 +527,10 @@ void Scene_Play::sDoAction(const Action& action)
         else if (action.name() == "RIGHT")
         {
             m_player->getComponent<CInput>().right = false;
+        }
+        else if (action.name() == "GUN")
+        {
+            m_player->getComponent<CState>().states[2] = "nogun";
         }
     }
 }
