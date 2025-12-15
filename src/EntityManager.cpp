@@ -25,11 +25,10 @@ const EntityVec& EntityManager::getEntities()
 
 const EntityVec& EntityManager::getEntities(const std::string& tag)
 {
+	static EntityVec empty; // empty vector to return if tag not found
 	auto it = m_entitiesMap.find(tag);
 	if (it == m_entitiesMap.end())
-	{
-		throw std::runtime_error("Tag '" + tag + "' does not exist in EntityManager");
-	}
+		return empty;
 	return it->second;
 }
 

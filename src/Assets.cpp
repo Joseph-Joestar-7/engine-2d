@@ -6,6 +6,11 @@ Assets::Assets()
 {
 }
 
+Assets::~Assets()
+{
+    std::cout << "Destroying Assets\n";
+}
+
 bool Assets::addTexture(const std::string& textureName, const std::string& path,
     bool smooth)
 {

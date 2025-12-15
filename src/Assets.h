@@ -21,7 +21,7 @@ private:
 
 public:
 	Assets();
-
+	~Assets();
 	const sf::Texture& getTexture(const std::string& textureName)     const;
 	const Animation& getAnimation(const std::string& animationName) const;
 	const sf::Font& getFont(const std::string& fontName)           const;

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include "Physics.h"
+#include <cassert>
 
 Scene_Play::Scene_Play(GameEngine* gameEngine, const std::string& levelPath)
     : Scene(gameEngine)
@@ -43,6 +44,8 @@ sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, std::shared_pt
     // The bottom left corner of the Animation should align with the bottom left of the grid cell
     
     //Will figure the sfml to regular math mapping later for now just gotta keep the low as y =16 in the level files hehe
+
+    assert(entity->hasComponent<CAnimation>() && "gridToMidPixel requires CAnimation");
 
     auto& anim = entity->getComponent<CAnimation>().animation;
     float w = (float)anim.getSize().x;
@@ -108,30 +111,25 @@ void Scene_Play::loadLevel(const std::string& levelPath)
         }
         else
         {
-            spawnPlayer(file);
+            file >> m_playerConfig.X >> m_playerConfig.Y
+                >> m_playerConfig.CX >> m_playerConfig.CY
+                >> m_playerConfig.SPEED >> m_playerConfig.JUMP
+                >> m_playerConfig.MAXSPEED >> m_playerConfig.GRAVITY;
+            spawnPlayer();
         }
     }
 }
 
-void Scene_Play::spawnPlayer(std::ifstream& file)
+void Scene_Play::spawnPlayer()
 {
-    float gx, gy;
-    float boxW, boxH;
-    float leftRightSpeed, jumpSpeed, maxSpeed, gravity;
-    std::string bulletAnim;
-
-    file >> gx >> gy
-        >> boxW >> boxH
-        >> leftRightSpeed >> jumpSpeed
-        >> maxSpeed >> gravity
-        >> bulletAnim;
-
+    
     m_player = m_entityManager.addEntity("player");
-    sf::Vector2f box =  { boxW, boxH };
-    m_player->addComponent<CTransform>(gridToMidPixel(gx, gy, m_player));
-    m_player->addComponent<CBoundingBox>(box);
-
+    sf::Vector2f box =  { m_playerConfig.CX,m_playerConfig.CY };
+    
     m_player->addComponent<CAnimation>(m_game->assets().getAnimation("PlayerIdle"), true);
+    m_player->addComponent<CTransform>(gridToMidPixel(m_playerConfig.X,m_playerConfig.Y, m_player));
+    m_player->addComponent<CBoundingBox>(box);
+    
     const auto& spriteSize = m_player->getComponent<CAnimation>().animation.getSize();
 
     float sx = 64 / spriteSize.x;
@@ -144,13 +142,48 @@ void Scene_Play::spawnPlayer(std::ifstream& file)
     m_player->getComponent<CGameplayTags>().gameplayTags.push_back("false"); //1
     m_player->getComponent<CGameplayTags>().gameplayTags.push_back("nogun"); //2
     m_player->getComponent<CGameplayTags>().gameplayTags.push_back("noshot"); //3
-    m_player->addComponent<CGravity>(gravity);
+    m_player->addComponent<CGravity>(m_playerConfig.GRAVITY);
     
 
 }
 
 void Scene_Play::spawnBullet()
 {
+    auto b = m_entityManager.addEntity("bullet");
+    float multiplier = m_player->getComponent<CTransform>().scale.x > 0 ? 1 : -1;
+    sf::Vector2f pos = { m_player->getComponent<CTransform>().pos.x + (multiplier* (m_gridSize.x/2)), m_player->getComponent<CTransform>().pos.y };
+    b->addComponent<CTransform>(pos);
+    b->getComponent<CTransform>().velocity = { multiplier * 2,0 };
+
+    b->addComponent<CAnimation>(m_game->assets().getAnimation("Bullet"), false);
+
+    const auto& spriteSize = b->getComponent<CAnimation>().animation.getSize();
+
+    float sx = 64 / spriteSize.x;
+    float sy = 64 / spriteSize.y;
+    b->getComponent<CTransform>().scale = { sx,sy };
+
+    sf::Vector2f box = { 32,32 };
+    b->addComponent<CBoundingBox>(box);
+
+} 
+
+void Scene_Play::spawnCoin(sf::Vector2f& pos)
+{
+    auto coin = m_entityManager.addEntity("Coin");
+    coin->addComponent<CTransform>();
+    coin->getComponent<CTransform>().pos = pos;
+
+    coin->addComponent<CAnimation>(m_game->assets().getAnimation("Coin"), true);
+
+    const auto& spriteSize = coin->getComponent<CAnimation>().animation.getSize();
+
+    float sx = 64 / spriteSize.x;
+    float sy = 64 / spriteSize.y;
+    coin->getComponent<CTransform>().scale = { sx,sy };
+
+    coin->addComponent<CBoundingBox>(m_gridSize);
+
 }
 
 void Scene_Play::sMovement()
@@ -180,19 +213,19 @@ void Scene_Play::sMovement()
             }
 
             playerVelocity.x = playerTransform.velocity.x;
-            playerVelocity.y -= 20;
+            playerVelocity.y += m_playerConfig.JUMP;
         }
 
         else if (input.right)
         {
-            playerVelocity.x += 5;
+            playerVelocity.x += m_playerConfig.SPEED;
             playerTags[0] = "run";
             playerTransform.scale.x = abs(playerTransform.scale.x);
             
         }
         else if (input.left)
         {
-            playerVelocity.x -= 5;
+            playerVelocity.x -= m_playerConfig.SPEED;
             playerTags[0] = "run";
             playerTransform.scale.x = -abs(playerTransform.scale.x);
         }
@@ -299,6 +332,33 @@ void Scene_Play::sCollision()
             resolveCollision(m_player, t);
         }
     }
+
+    auto& bullets = m_entityManager.getEntities("bullet");
+
+    for (auto b : bullets)
+    {
+        for (auto t : collidingEntities)
+        {
+            if (!t->hasComponent<CBoundingBox>() || t == b || t->getComponent<CAnimation>().animation.getName() == "Coin")
+                continue;
+
+            auto overlap = Physics::GetOverlap(b, t);
+            if (overlap.x > 0 && overlap.y > 0)
+            {
+                // Destroy bullet on impact
+                b->destroy();
+
+                if (t->getComponent<CAnimation>().animation.getName() == "TileB")
+                {
+                    setAnimation(t, "Explode", false);
+                    t->removeComponent<CBoundingBox>();
+                    t->addComponent<CLifespan>(t->getComponent<CAnimation>().animation.getAnimDuration());
+                }
+
+                break;
+            }
+        }
+    }
 }
 
 void Scene_Play::sLifeSpan()
@@ -379,23 +439,7 @@ void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string til
     }
 }
 
-void Scene_Play::spawnCoin(sf::Vector2f& pos)
-{
-    auto coin = m_entityManager.addEntity("Coin");
-    coin->addComponent<CTransform>();
-    coin->getComponent<CTransform>().pos = pos;
 
-    coin->addComponent<CAnimation>(m_game->assets().getAnimation("Coin"), true);
-
-    const auto& spriteSize = coin->getComponent<CAnimation>().animation.getSize();
-
-    float sx = 64 / spriteSize.x;
-    float sy = 64 / spriteSize.y;
-    coin->getComponent<CTransform>().scale = { sx,sy };
-
-    coin->addComponent<CBoundingBox>(m_gridSize);
-
-}
 
 
 void Scene_Play::drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2)

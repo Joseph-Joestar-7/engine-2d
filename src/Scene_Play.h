@@ -11,7 +11,7 @@ private:
 	struct PlayerConfig
 	{
 		float X, Y, CX, CY, SPEED, MAXSPEED, JUMP, GRAVITY;
-		std::string WEAPON;
+		
 	};
 
 	std::shared_ptr<Entity> m_player;
@@ -47,11 +47,11 @@ private:
 		const std::string& animationName, bool repeat); 
 
 	void drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2);
-	void spawnPlayer(std::ifstream& file);
+	void spawnPlayer();
+	void spawnBullet();
 	void spawnCoin(sf::Vector2f& pos);
 
 public:
 	Scene_Play(GameEngine* gameEngine, const std::string& levelPath);
-
 };
 

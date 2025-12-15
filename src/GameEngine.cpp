@@ -8,6 +8,14 @@ GameEngine::GameEngine(const std::string& filePath)
 	init(filePath);
 }
 
+GameEngine::~GameEngine()
+{
+	// Destroy all scenes explicitly
+	m_SceneMap.clear();  // destroys all shared_ptr<Scene> safely
+
+	// Assets m_assets will be destroyed automatically AFTER scenes
+}
+
 void GameEngine::init(const std::string& filePath)
 {
 	std::ifstream fin(filePath);

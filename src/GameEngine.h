@@ -25,7 +25,7 @@ protected:
 
 public:
 	GameEngine(const std::string& filePath);
-
+	~GameEngine();
 	bool              isRunning() const;
 	const Assets& assets()    const;
 	sf::RenderWindow& window();
