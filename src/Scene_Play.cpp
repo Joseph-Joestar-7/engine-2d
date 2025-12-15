@@ -140,12 +140,17 @@ void Scene_Play::spawnPlayer(std::ifstream& file)
 
     m_player->getComponent<CTransform>().scale = { sx,sy };
     m_player->addComponent<CInput>();
-    m_player->addComponent<CGameplayTags>("idle");
-    m_player->getComponent<CGameplayTags>().gameplayTags.push_back("false");
-    m_player->getComponent<CGameplayTags>().gameplayTags.push_back("nogun");
+    m_player->addComponent<CGameplayTags>("idle"); //0
+    m_player->getComponent<CGameplayTags>().gameplayTags.push_back("false"); //1
+    m_player->getComponent<CGameplayTags>().gameplayTags.push_back("nogun"); //2
+    m_player->getComponent<CGameplayTags>().gameplayTags.push_back("noshot"); //3
     m_player->addComponent<CGravity>(gravity);
     
 
+}
+
+void Scene_Play::spawnBullet()
+{
 }
 
 void Scene_Play::sMovement()
@@ -153,24 +158,24 @@ void Scene_Play::sMovement()
     sf::Vector2f playerVelocity(0, 0);
 
     auto& input = m_player->getComponent<CInput>();
-    auto& playerState = m_player->getComponent<CGameplayTags>().gameplayTags;
+    auto& playerTags = m_player->getComponent<CGameplayTags>().gameplayTags;
     std::string& isG = m_player->getComponent<CGameplayTags>().gameplayTags[1];
     auto& playerTransform = m_player->getComponent<CTransform>();
 
     //basically setting it back to idle if you've finished jump already
     //it ain't perfect but it works so all is well
-    if (isG == "true" && playerState[0] == "jump")
+    if (isG == "true" && playerTags[0] == "jump")
     {
-        playerState[0] = "idle";
+        playerTags[0] = "idle";
     }
 
     if (isG == "true")
     {
         if (input.up)
         {
-            if (playerState[0] == "run" || playerState[0] == "idle")
+            if (playerTags[0] == "run" || playerTags[0] == "idle")
             {
-                playerState[0] = "jump";
+                playerTags[0] = "jump";
                 isG = "false";
             }
 
@@ -181,26 +186,26 @@ void Scene_Play::sMovement()
         else if (input.right)
         {
             playerVelocity.x += 5;
-            playerState[0] = "run";
+            playerTags[0] = "run";
             playerTransform.scale.x = abs(playerTransform.scale.x);
             
         }
         else if (input.left)
         {
             playerVelocity.x -= 5;
-            playerState[0] = "run";
+            playerTags[0] = "run";
             playerTransform.scale.x = -abs(playerTransform.scale.x);
         }
-        else if (!input.right && playerState[0] == "run")
+        else if (!input.right && playerTags[0] == "run")
         {
             
-            playerState[0] = "idle";
+            playerTags[0] = "idle";
             playerTransform.scale.x = abs(playerTransform.scale.x);
         }
-        else if (!input.left && playerState[0] == "run")
+        else if (!input.left && playerTags[0] == "run")
         {
             
-            playerState[0] = "idle";
+            playerTags[0] = "idle";
             playerTransform.scale.x = -abs(playerTransform.scale.x);
         }
         
@@ -224,34 +229,34 @@ void Scene_Play::sMovement()
 
 void Scene_Play::sAnimation()
 {
-    const auto& playerState = m_player->getComponent<CGameplayTags>().gameplayTags;
+    const auto& playerTags = m_player->getComponent<CGameplayTags>().gameplayTags;
 
-    if (playerState[2] == "gun")
+    if (playerTags[2] == "gun")
     {
-        if (playerState[0] == "run")
+        if (playerTags[0] == "run")
         {
             setAnimation(m_player, "PlayerRunGun", true);
         }
-        else if (playerState[0] == "idle")
+        else if (playerTags[0] == "idle")
         {
             setAnimation(m_player, "PlayerIdleGun", true);
         }
-        else if (playerState[0] == "jump")
+        else if (playerTags[0] == "jump")
         {
             setAnimation(m_player, "PlayerJumpGun", true);
         }
     }
     else
     {
-        if (playerState[0] == "run")
+        if (playerTags[0] == "run")
         {
             setAnimation(m_player, "PlayerRun", true);
         }
-        else if (playerState[0] == "idle")
+        else if (playerTags[0] == "idle")
         {
             setAnimation(m_player, "PlayerIdle", true);
         }
-        else if (playerState[0] == "jump")
+        else if (playerTags[0] == "jump")
         {
             setAnimation(m_player, "PlayerJump", true);
         }
@@ -511,7 +516,11 @@ void Scene_Play::sDoAction(const Action& action)
         }
         else if (action.name() == "GUN")
         {
+            if (m_player->getComponent<CGameplayTags>().gameplayTags[3] == "shot")
+                return;
+            m_player->getComponent<CGameplayTags>().gameplayTags[3] = "shot";
             m_player->getComponent<CGameplayTags>().gameplayTags[2] = "gun";
+            spawnBullet();
         }
     }
     else if (action.type() == "END")
@@ -530,6 +539,7 @@ void Scene_Play::sDoAction(const Action& action)
         }
         else if (action.name() == "GUN")
         {
+            m_player->getComponent<CGameplayTags>().gameplayTags[3] = "noshot";
             m_player->getComponent<CGameplayTags>().gameplayTags[2] = "nogun";
         }
     }
