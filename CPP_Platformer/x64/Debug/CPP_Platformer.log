@@ -11,4 +11,5 @@ C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Entity.h(51,36): 
               T=CLifespan
           ]
   
+  LINK : C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\x64\Debug\CPP_Platformer.exe not found or not built by the last incremental link; performing full link
   CPP_Platformer.vcxproj -> C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\x64\Debug\CPP_Platformer.exe

@@ -8,7 +8,7 @@ typedef std::tuple<
 	CInput,
 	CLifespan,
 	CAnimation,
-	CState,
+	CGameplayTags,
 	CBoundingBox,
 	CGravity,
 	CScore

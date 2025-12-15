@@ -91,7 +91,7 @@ void Scene_Play::loadLevel(const std::string& levelPath)
             tile->addComponent<CBoundingBox>(m_gridSize);
 
             if (type == "TileQ")
-                tile->addComponent<CState>("Unused");
+                tile->addComponent<CGameplayTags>("Unused");
         }
         else if (type == "Dec")
         {
@@ -140,9 +140,9 @@ void Scene_Play::spawnPlayer(std::ifstream& file)
 
     m_player->getComponent<CTransform>().scale = { sx,sy };
     m_player->addComponent<CInput>();
-    m_player->addComponent<CState>("idle");
-    m_player->getComponent<CState>().states.push_back("false");
-    m_player->getComponent<CState>().states.push_back("nogun");
+    m_player->addComponent<CGameplayTags>("idle");
+    m_player->getComponent<CGameplayTags>().gameplayTags.push_back("false");
+    m_player->getComponent<CGameplayTags>().gameplayTags.push_back("nogun");
     m_player->addComponent<CGravity>(gravity);
     
 
@@ -153,8 +153,8 @@ void Scene_Play::sMovement()
     sf::Vector2f playerVelocity(0, 0);
 
     auto& input = m_player->getComponent<CInput>();
-    auto& playerState = m_player->getComponent<CState>().states;
-    std::string& isG = m_player->getComponent<CState>().states[1];
+    auto& playerState = m_player->getComponent<CGameplayTags>().gameplayTags;
+    std::string& isG = m_player->getComponent<CGameplayTags>().gameplayTags[1];
     auto& playerTransform = m_player->getComponent<CTransform>();
 
     //basically setting it back to idle if you've finished jump already
@@ -224,7 +224,7 @@ void Scene_Play::sMovement()
 
 void Scene_Play::sAnimation()
 {
-    const auto& playerState = m_player->getComponent<CState>().states;
+    const auto& playerState = m_player->getComponent<CGameplayTags>().gameplayTags;
 
     if (playerState[2] == "gun")
     {
@@ -274,7 +274,7 @@ void Scene_Play::sCollision()
 
     //I am setting the isGrounded false so that I can check for each tick, if I'm in the air
     //Since it's already false before resolve collision is called -> if no block overlapped with us, it retains value
-    m_player->getComponent<CState>().states[1] = "false";
+    m_player->getComponent<CGameplayTags>().gameplayTags[1] = "false";
 
     for (auto t : collidingEntities)
     {
@@ -327,7 +327,7 @@ void Scene_Play::resolveCollision(std::shared_ptr<Entity> player, std::shared_pt
         {
             pTrans.pos.y -= overlap.y;
             pTrans.velocity.y = 0;
-            player->getComponent<CState>().states[1] = "true";
+            player->getComponent<CGameplayTags>().gameplayTags[1] = "true";
         }
         else
         {
@@ -364,10 +364,10 @@ void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string til
     }
     else if (tileName == "TileQ")
     {
-        if (tile->getComponent<CState>().states[0] == "Used")
+        if (tile->getComponent<CGameplayTags>().gameplayTags[0] == "Used")
             return;
 
-        tile->getComponent<CState>().states[0] = "Used";
+        tile->getComponent<CGameplayTags>().gameplayTags[0] = "Used";
         tile->getComponent<CAnimation>().repeat = false;
         sf::Vector2f pos = { tile->getComponent<CTransform>().pos.x,tile->getComponent<CTransform>().pos.y - m_gridSize.y }; // bruh i swear i wasn't using 64 as magic number here
         spawnCoin(pos);
@@ -511,7 +511,7 @@ void Scene_Play::sDoAction(const Action& action)
         }
         else if (action.name() == "GUN")
         {
-            m_player->getComponent<CState>().states[2] = "gun";
+            m_player->getComponent<CGameplayTags>().gameplayTags[2] = "gun";
         }
     }
     else if (action.type() == "END")
@@ -530,7 +530,7 @@ void Scene_Play::sDoAction(const Action& action)
         }
         else if (action.name() == "GUN")
         {
-            m_player->getComponent<CState>().states[2] = "nogun";
+            m_player->getComponent<CGameplayTags>().gameplayTags[2] = "nogun";
         }
     }
 }

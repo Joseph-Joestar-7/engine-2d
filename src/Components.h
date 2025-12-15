@@ -100,19 +100,19 @@ public:
 	}
 };
 
-class CState : public Component
+class CGameplayTags : public Component
 {
 public:
 	
-	std::vector<std::string> states;
-	CState()
+	std::vector<std::string> gameplayTags;
+	CGameplayTags()
 	{
 	}
 
-	CState(const std::string& _state)
+	CGameplayTags(const std::string& _tag)
 		
 	{
-		states.push_back(_state);
+		gameplayTags.push_back(_tag);
 	}
 };
 
