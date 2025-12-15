@@ -1,4 +1,10 @@
-﻿  Scene_Play.cpp
+﻿  Entity.cpp
+  EntityManager.cpp
+  GameEngine.cpp
+  Main.cpp
+  Physics.cpp
+  Scene.cpp
+  Scene_Play.cpp
 C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(361,27): warning C4244: 'initializing': conversion from 'size_t' to 'float', possible loss of data
 C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Entity.h(51,36): warning C4244: 'argument': conversion from 'float' to 'const int', possible loss of data
   (compiling source file 'src/Scene_Play.cpp')
@@ -11,5 +17,5 @@ C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Entity.h(51,36): 
               T=CLifespan
           ]
   
-  LINK : C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\x64\Debug\CPP_Platformer.exe not found or not built by the last incremental link; performing full link
+  Generating Code...
   CPP_Platformer.vcxproj -> C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\x64\Debug\CPP_Platformer.exe
