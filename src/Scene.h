@@ -1,6 +1,7 @@
 #pragma once
 #include "Action.h"
 #include "Entity.h"
+#include "Camera.h"
 #include "SFML/Graphics.hpp"
 
 class GameEngine; //Forward declaration 
@@ -15,6 +16,7 @@ protected:
 	bool          m_hasEnded = false;
 	bool          m_paused = false;
 	ActionMap     m_actionMap;
+	CameraType m_cameraType = CameraType::Default;
 
 public:
 	Scene();

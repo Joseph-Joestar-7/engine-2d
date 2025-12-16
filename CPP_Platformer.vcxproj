@@ -156,6 +156,7 @@
     <Font Include="fonts\KillerTech.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Scene_Play.h" />
     <ClInclude Include="src\Scene_Menu.h" />

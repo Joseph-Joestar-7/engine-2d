@@ -63,6 +63,8 @@ sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, std::shared_pt
 
 void Scene_Play::loadLevel(const std::string& levelPath)
 {
+    m_cameraType = CameraType::FollowX;
+
     m_entityManager = EntityManager();
 
     std::ifstream file(levelPath);
