@@ -114,6 +114,10 @@ void Scene_Play::loadLevel(const std::string& levelPath)
 
             e->getComponent<CTransform>().scale = sf::Vector2f(sx,sy);
         }
+        else if (type == "Gun")
+        {
+            file >> m_gunConfig.CX >> m_gunConfig.CY >> m_gunConfig.SPEED;
+        }
         else
         {
             file >> m_playerConfig.X >> m_playerConfig.Y
@@ -156,9 +160,9 @@ void Scene_Play::spawnBullet()
 {
     auto b = m_entityManager.addEntity("bullet");
     float multiplier = m_player->getComponent<CTransform>().scale.x > 0 ? 1 : -1;
-    sf::Vector2f pos = { m_player->getComponent<CTransform>().pos.x + (multiplier* (m_gridSize.x/2)), m_player->getComponent<CTransform>().pos.y };
+    sf::Vector2f pos = { m_player->getComponent<CTransform>().pos.x + (multiplier* (m_gridSize.x/2 + 5)), m_player->getComponent<CTransform>().pos.y };
     b->addComponent<CTransform>(pos);
-    b->getComponent<CTransform>().velocity = { multiplier * 2,0 };
+    b->getComponent<CTransform>().velocity = { multiplier * m_gunConfig.SPEED,0 };
 
     b->addComponent<CAnimation>(m_game->assets().getAnimation("Bullet"), false);
 
@@ -168,7 +172,7 @@ void Scene_Play::spawnBullet()
     float sy = 64 / spriteSize.y;
     b->getComponent<CTransform>().scale = { sx,sy };
 
-    sf::Vector2f box = { 32,32 };
+    sf::Vector2f box = { m_gunConfig.CX,m_gunConfig.CY };
     b->addComponent<CBoundingBox>(box);
 
 } 

@@ -14,8 +14,14 @@ private:
 		
 	};
 
+	struct GunConfig
+	{
+		float CX, CY, SPEED;
+	};
+
 	std::shared_ptr<Entity> m_player;
 	PlayerConfig            m_playerConfig;
+	GunConfig               m_gunConfig;
 	EntityManager           m_entityManager;
 	std::string             m_levelPath;
 	bool                    m_drawTextures = true;
