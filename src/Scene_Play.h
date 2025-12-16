@@ -16,7 +16,7 @@ private:
 
 	struct GunConfig
 	{
-		float CX, CY, SPEED;
+		float CX, CY, SPEED,LIFESPAN;
 	};
 
 	std::shared_ptr<Entity> m_player;

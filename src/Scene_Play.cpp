@@ -121,7 +121,7 @@ void Scene_Play::loadLevel(const std::string& levelPath)
         }
         else if (type == "Gun")
         {
-            file >> m_gunConfig.CX >> m_gunConfig.CY >> m_gunConfig.SPEED;
+            file >> m_gunConfig.CX >> m_gunConfig.CY >> m_gunConfig.SPEED >> m_gunConfig.LIFESPAN;
         }
         else
         {
@@ -180,7 +180,7 @@ void Scene_Play::spawnPlayer()
 
     m_player->getComponent<CTransform>().scale = { sx,sy };
     m_player->addComponent<CInput>();
-    m_player->addComponent<CGameplayTags>("idle"); //0
+    m_player->addComponent<CGameplayTags>("idle"); //0 -> remember index of the gameplay tags
     m_player->getComponent<CGameplayTags>().gameplayTags.push_back("false"); //1
     m_player->getComponent<CGameplayTags>().gameplayTags.push_back("nogun"); //2
     m_player->getComponent<CGameplayTags>().gameplayTags.push_back("noshot"); //3
@@ -207,6 +207,8 @@ void Scene_Play::spawnBullet()
 
     sf::Vector2f box = { m_gunConfig.CX,m_gunConfig.CY };
     b->addComponent<CBoundingBox>(box);
+
+    b->addComponent<CLifespan>(m_gunConfig.LIFESPAN);
 
 } 
 
@@ -273,13 +275,11 @@ void Scene_Play::sMovement()
         }
         else if (!input.right && playerTags[0] == "run")
         {
-            
             playerTags[0] = "idle";
             playerTransform.scale.x = abs(playerTransform.scale.x);
         }
         else if (!input.left && playerTags[0] == "run")
         {
-            
             playerTags[0] = "idle";
             playerTransform.scale.x = -abs(playerTransform.scale.x);
         }
@@ -486,6 +486,7 @@ void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string til
 
 void Scene_Play::drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2)
 {
+    //TODO
 }
 
 
