@@ -588,3 +588,7 @@ void Scene_Play::sDoAction(const Action& action)
         }
     }
 }
+
+void Scene_Play::sCamera()
+{
+}

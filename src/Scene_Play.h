@@ -31,6 +31,7 @@ private:
 	void onEnd()                         override;
 	void sRender()                       override;
 	void sDoAction(const Action& action) override;
+	void sCamera()                       override;
 
 	void init(const std::string& levelPath);
 	sf::Vector2f gridToMidPixel(float gridX, float gridY, std::shared_ptr<Entity> entity);

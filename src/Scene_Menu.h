@@ -17,6 +17,7 @@ private:
 	void update()                        override;
 	void sRender()                       override;
 	void sDoAction(const Action& action) override;
+	void sCamera()                       override;
 
 public:
 	Scene_Menu(GameEngine* gameEngine);

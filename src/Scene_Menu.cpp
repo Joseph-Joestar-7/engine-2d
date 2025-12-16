@@ -20,6 +20,7 @@ void Scene_Menu::init()
 	registerAction(sf::Keyboard::Q, "QUIT");
 	registerAction(sf::Keyboard::Escape, "QUIT");
 
+	//UI - basically name of the game and the buttons that follow
 	m_title = "Some Platformer Lol";
 	m_menuStrings.push_back("Level 1");
 	m_menuStrings.push_back("Level 2");
@@ -36,6 +37,7 @@ void Scene_Menu::init()
 void Scene_Menu::update()
 {
 	sRender();
+	
 }
 
 void Scene_Menu::onEnd()
@@ -73,6 +75,10 @@ void Scene_Menu::sDoAction(const Action& action)
 			onEnd();
 		}
 	}
+}
+
+void Scene_Menu::sCamera()
+{
 }
 
 void Scene_Menu::sRender()
