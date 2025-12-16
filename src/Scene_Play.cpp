@@ -613,9 +613,26 @@ void Scene_Play::sCamera()
 
     sf::Vector2f target = m_cameraPos;
 
+    const float halfW = m_view.getSize().x * 0.5f;
+    const float halfH = m_view.getSize().y * 0.5f;
+
     if (m_cameraType == CameraType::FollowX)
     {
         target.x = playerPos.x;
+
+        target.x = std::max(halfW, target.x);
+        target.x = std::min(m_levelWidth - halfW, target.x);
+
+        target.y = halfH;
+    }
+    else if (m_cameraType == CameraType::FollowXY)
+    {
+        target.x = playerPos.x;
+        target.y = playerPos.y;
+
+    }
+    else
+    {
     }
 
     m_cameraPos += (target - m_cameraPos) * m_cameraSpeed;
@@ -623,3 +640,4 @@ void Scene_Play::sCamera()
     m_view.setCenter(m_cameraPos);
     window.setView(m_view);
 }
+
