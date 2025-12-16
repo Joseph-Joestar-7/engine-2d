@@ -10,10 +10,7 @@ GameEngine::GameEngine(const std::string& filePath)
 
 GameEngine::~GameEngine()
 {
-	// Destroy all scenes explicitly
-	m_SceneMap.clear();  // destroys all shared_ptr<Scene> safely
-
-	// Assets m_assets will be destroyed automatically AFTER scenes
+	m_SceneMap.clear();
 }
 
 void GameEngine::init(const std::string& filePath)
@@ -30,11 +27,11 @@ void GameEngine::init(const std::string& filePath)
 
 	if (fullScreenMode)
 	{
-		m_window.create(sf::VideoMode(width, height), "Custom Game Engine", sf::Style::Fullscreen);
+		m_window.create(sf::VideoMode(width, height), "Some Game Engine", sf::Style::Fullscreen);
 	}
 	else
 	{
-		m_window.create(sf::VideoMode(width, height), "Custom Game Engine");
+		m_window.create(sf::VideoMode(width, height), "Some Game Engine");
 	}
 
 	m_window.setFramerateLimit(frameRate); 

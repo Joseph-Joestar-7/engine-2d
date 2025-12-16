@@ -56,3 +56,11 @@ Levels specify what entities to spawn, their components, and their initial data.
 - Collision / overlap detection
 - Bounding box interactions
 - Simple gravity support through CGravity
+
+### 🎬 Scene System
+
+- **Scene (Base Class)** – Holds core data like `ActionMap`, `CameraType`, and common variables.  
+- **Scene_Menu** – Inherits from `Scene`; implements menu-specific systems and logic.  
+- **Scene_Play** – Inherits from `Scene`; implements gameplay-specific systems, input handling, and game logic.  
+
+Each scene defines its own systems and behavior while sharing common functionality from the base `Scene` class.

@@ -13,7 +13,7 @@ private:
 		bool smooth = true);
 	bool addTexture(const std::string& textureName, const std::string& path,
 		int posX, int posY, int width, int height,
-		bool smooth = true);                                        // (posX, posY) is (rectLeft, rectTop)
+		bool smooth = true);                                      
 	bool addFont(const std::string& fontName, const std::string& path);
 	bool addAnimation(const std::string& animationName,
 		const std::string& textureName, const size_t frameCount,
