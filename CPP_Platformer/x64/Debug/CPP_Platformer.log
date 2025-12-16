@@ -1,11 +1,11 @@
 ﻿  Scene_Play.cpp
-C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(162,22): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(435,27): warning C4244: 'initializing': conversion from 'size_t' to 'float', possible loss of data
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(194,22): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(467,27): warning C4244: 'initializing': conversion from 'size_t' to 'float', possible loss of data
 C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Entity.h(51,36): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
   (compiling source file 'src/Scene_Play.cpp')
       C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Entity.h(51,36):
       the template instantiation context (the oldest one first) is
-          C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(364,22):
+          C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(396,22):
           see reference to function template instantiation 'T &Entity::addComponent<CLifespan,size_t>(size_t &&)' being compiled
           with
           [
@@ -16,7 +16,7 @@ C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Entity.h(51,36): 
   (compiling source file 'src/Scene_Play.cpp')
       C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Entity.h(51,36):
       the template instantiation context (the oldest one first) is
-          C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(437,13):
+          C:\Users\RITABAN\Desktop\CS Playground\SFML\CPP_Platformer\src\Scene_Play.cpp(469,13):
           see reference to function template instantiation 'T &Entity::addComponent<CLifespan,float&>(float &)' being compiled
           with
           [

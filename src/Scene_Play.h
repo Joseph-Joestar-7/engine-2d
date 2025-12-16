@@ -37,6 +37,8 @@ private:
 	sf::Vector2f m_cameraPos;
 	float        m_cameraSpeed = 0.1f;
 	float        m_levelWidth=2000;
+	//last tile's x * m_gridsize.x gives a rough estimate of m_levelWidth
+	//for 31 it was roughly 1984 so 2000 works
 
 	void update()                        override;
 	void onEnd()                         override;
@@ -47,6 +49,7 @@ private:
 	void init(const std::string& levelPath);
 	sf::Vector2f gridToMidPixel(float gridX, float gridY, std::shared_ptr<Entity> entity);
 	void loadLevel(const std::string& levelPath);
+	float calcLevelWidth() ;
 	void sMovement();
 	void sAnimation();
 	void sCollision();

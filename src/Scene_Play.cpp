@@ -36,6 +36,10 @@ void Scene_Play::init(const std::string& levelPath)
     m_cameraPos = m_view.getCenter();
 
     loadLevel(levelPath);
+
+    m_entityManager.update(); // just do it once so that the tile entities are commited 
+    m_levelWidth = calcLevelWidth(); // to dynamically calc the level width
+    std::cout << m_levelWidth << "\n";
 }
 
 sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, std::shared_ptr<Entity> entity)
@@ -128,6 +132,34 @@ void Scene_Play::loadLevel(const std::string& levelPath)
         }
     }
 }
+
+float Scene_Play::calcLevelWidth() 
+{
+    float maxRightEdge = 0.0f;
+
+    auto& tiles = m_entityManager.getEntities("Tile");
+
+    for (const auto& tile : tiles)
+    {
+        const auto& transform = tile->getComponent<CTransform>();
+        const auto& box = tile->getComponent<CBoundingBox>();
+
+        const float rightEdge = transform.pos.x + box.halfSize.x;
+       
+        if (rightEdge > maxRightEdge)
+        {
+            maxRightEdge = rightEdge;
+        }
+    }
+
+    if (maxRightEdge <= 0.0f)
+    {
+        return m_view.getSize().x;
+    }
+
+    return maxRightEdge;
+}
+
 
 void Scene_Play::spawnPlayer()
 {
@@ -343,7 +375,7 @@ void Scene_Play::sCollision()
     }
 
     auto& bullets = m_entityManager.getEntities("bullet");
-
+   
     for (auto b : bullets)
     {
         for (auto t : collidingEntities)
