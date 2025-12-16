@@ -70,7 +70,8 @@ sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, std::shared_pt
 
 void Scene_Play::loadLevel(const std::string& levelPath)
 {
-    m_cameraType = CameraType::FollowX;
+    // CAMERA CONFIG
+    m_cameraType = CameraType::FollowX; // For now just set the camera through code
 
     m_entityManager = EntityManager();
 
@@ -663,12 +664,11 @@ void Scene_Play::sCamera()
     }
     else if (m_cameraType == CameraType::FollowXY)
     {
-        target.x = playerPos.x;
-        target.y = playerPos.y;
-
+        //TODO
     }
     else
     {
+        //TODO
     }
 
     m_cameraPos += (target - m_cameraPos) * m_cameraSpeed;
