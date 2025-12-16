@@ -27,6 +27,10 @@ private:
 
 	sf::Text                m_coinText;
 
+	sf::View     m_view;
+	sf::Vector2f m_cameraPos;
+	float        m_cameraSpeed = 0.1f;
+
 	void update()                        override;
 	void onEnd()                         override;
 	void sRender()                       override;

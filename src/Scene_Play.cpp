@@ -32,6 +32,9 @@ void Scene_Play::init(const std::string& levelPath)
     m_gridText.setCharacterSize(12);
     m_gridText.setFont(m_game->assets().getFont("Mario"));
 
+    m_view = m_game->window().getDefaultView();
+    m_cameraPos = m_view.getCenter();
+
     loadLevel(levelPath);
 }
 
@@ -455,10 +458,11 @@ void Scene_Play::update()
     if (!m_paused)
     {
         m_entityManager.update();
+        sCamera();
         sMovement();
         sCollision();
         sLifeSpan();
-        sAnimation();
+        sAnimation(); 
     }
     sRender();
 }
@@ -481,19 +485,8 @@ void Scene_Play::sRender()
         window.clear(sf::Color(50, 50, 150));
     }
 
-    m_coinText.setFont(m_game->assets().getFont("Mario"));
-    m_coinText.setCharacterSize(32);
-
-    m_coinText.setString("Coins = " + std::to_string(m_player->getComponent<CScore>().coins));
-    m_coinText.setFillColor(sf::Color::White);
-
-    const float paddingX = 20;
-    const float paddingY = 5;
-    const float posX = window.getSize().x - m_coinText.getLocalBounds().width - paddingX;
-    const float posY = 10 + paddingY;
-    m_coinText.setPosition(posX, posY);
-
-    window.draw(m_coinText);
+    //Render World Textures below:
+    window.setView(m_view);
 
     if (m_drawTextures)
     {
@@ -535,6 +528,25 @@ void Scene_Play::sRender()
             }
         }
     }
+
+    //Render UI below:
+
+    window.setView(window.getDefaultView());
+
+    m_coinText.setFont(m_game->assets().getFont("Mario"));
+    m_coinText.setCharacterSize(32);
+
+    m_coinText.setString("Coins = " + std::to_string(m_player->getComponent<CScore>().coins));
+    m_coinText.setFillColor(sf::Color::White);
+
+    const float paddingX = 20;
+    const float paddingY = 5;
+    const float posX = window.getSize().x - m_coinText.getLocalBounds().width - paddingX;
+    const float posY = 10 + paddingY;
+    m_coinText.setPosition(posX, posY);
+
+    window.draw(m_coinText);
+
     window.display();
 }
 
@@ -593,4 +605,21 @@ void Scene_Play::sDoAction(const Action& action)
 
 void Scene_Play::sCamera()
 {
+    if (!m_player)
+        return;
+
+    const auto& playerPos = m_player->getComponent<CTransform>().pos;
+    auto& window = m_game->window();
+
+    sf::Vector2f target = m_cameraPos;
+
+    if (m_cameraType == CameraType::FollowX)
+    {
+        target.x = playerPos.x;
+    }
+
+    m_cameraPos += (target - m_cameraPos) * m_cameraSpeed;
+
+    m_view.setCenter(m_cameraPos);
+    window.setView(m_view);
 }
