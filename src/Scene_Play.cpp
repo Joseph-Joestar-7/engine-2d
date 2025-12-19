@@ -481,15 +481,10 @@ void Scene_Play::handleSpecialBlock(std::shared_ptr<Entity> tile,std::string til
     }
 }
 
-
-
-
 void Scene_Play::drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2)
 {
     //TODO
 }
-
-
 
 void Scene_Play::update()
 {
@@ -594,6 +589,8 @@ void Scene_Play::sDoAction(const Action& action)
     {
         if (action.name() == "TOGGLE_COLLISION")
             m_drawCollision = !m_drawCollision;
+        else if (action.name() == "TOGGLE_TEXTURE")
+            m_drawTextures = !m_drawTextures;
         else if (action.name() == "DEBUG")
             flag = !flag;
         else if (action.name() == "EXIT")
